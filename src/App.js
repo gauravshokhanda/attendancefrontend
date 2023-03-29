@@ -58,15 +58,13 @@ function DemoApp() {
 
 
       const eventClickInfo = (info)=> {
-    
-        let title = prompt('Update Your name');
+       
         let isPresent = prompt('Is the student present? (yes/no)') === 'yes';
 
-        if (title) {
+        if (info.event.id) {
           axios
             .put('http://localhost:3000/employes/attendance', {
               id:info.event.id,
-              studentId: title,
               present: isPresent
             })
             .then((response) => {
