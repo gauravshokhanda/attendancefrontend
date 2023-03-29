@@ -56,13 +56,41 @@ function DemoApp() {
         fetchEvents()
       },[])
 
+
+      const eventClickInfo = (info)=> {
+    
+        let title = prompt('Update Your name');
+        let isPresent = prompt('Is the student present? (yes/no)') === 'yes';
+
+        if (title) {
+          axios
+            .put('http://localhost:3000/employes/attendance', {
+              id:info.event.id,
+              studentId: title,
+              present: isPresent
+            })
+            .then((response) => {
+              console.log(response,"response")
+              fetchEvents()
+            
+              console.log('Attendance updated successfully');
+            })
+            .catch((error) => {
+              console.error('Error recording attendance', error);
+            });
+        }
+      }
+
     const transformedEvents =   events?.map((event) => ({
       title: event.studentId,
       date: new Date(event.date).toISOString().substring(0, 10),
       backgroundColor: event.present ? 'green' : 'red',
+      id:event._id
     }));
 
     console.log(transformedEvents)
+
+
 
 
 
@@ -84,7 +112,7 @@ function DemoApp() {
           initialView="dayGridMonth"
           editable={true}
           selectable={true}
-       
+          eventClick={eventClickInfo }
           dayMaxEvents={true}
           events={transformedEvents}
           select={handleDateSelect}
